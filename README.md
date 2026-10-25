@@ -24,6 +24,7 @@ Juego de lucha 2D al estilo de las recreativas de los 90, con políticos fictici
 
 ## Índice
 
+- [Novedades de la versión 3](#novedades-de-la-versión-3)
 - [Novedades de la versión 2](#novedades-de-la-versión-2)
 - [Modos de juego](#modos-de-juego)
 - [Capturas](#capturas)
@@ -37,6 +38,17 @@ Juego de lucha 2D al estilo de las recreativas de los 90, con políticos fictici
 - [Ejecutar en local](#ejecutar-en-local)
 - [Cómo está hecho](#cómo-está-hecho)
 - [Flujo de trabajo](#flujo-de-trabajo)
+
+## Novedades de la versión 3
+
+- **Agarres**: pegado al rival, adelante + puño lo lanza al suelo. No se pueden bloquear, así que cubrirse todo el rato ya no basta. Atrás + puño lo lanza por detrás.
+- **Un golpe propio por candidato** (adelante + patada), con golpes altos que hay que parar de pie y golpes bajos que hay que parar agachado.
+- **Modo entrenamiento**: vida que se recupera sola, tiempo infinito, rival configurable (quieto, agachado, cubriéndose, saltando o CPU), cajas de golpe visibles, historial de botones y daño de cada combo.
+- **Cómo se juega**: tutorial de cinco pantallas animadas desde el menú.
+- **Lista de movimientos** de cada candidato en la pausa.
+- **Retratos grandes** en la pantalla de VS.
+- **Mando**: funciona con mandos de Xbox, PlayStation y compatibles.
+- **Teclas configurables** para el jugador 1.
 
 ## Novedades de la versión 2
 
@@ -60,6 +72,7 @@ Juego de lucha 2D al estilo de las recreativas de los 90, con políticos fictici
 | **Arcade** | Dos rivales, la fase de bonus del coche oficial, un tercer rival y el jefe final. Al perder puedes seguir a cambio de la mitad de los puntos. |
 | **1 jugador vs CPU** | Un combate suelto contra un rival al azar. |
 | **2 jugadores** | Dos personas en el mismo teclado. |
+| **Entrenamiento** | Eliges candidato y rival, y practicas sin tiempo ni K.O. Desde la pausa cambias el comportamiento del rival, activas las cajas de golpe o la super infinita. |
 | **Demo** | Arranca sola en el título tras 15 segundos sin tocar nada. |
 
 ## Capturas
@@ -67,7 +80,15 @@ Juego de lucha 2D al estilo de las recreativas de los 90, con políticos fictici
 <table>
 <tr>
 <td width="50%"><img src="docs/img/titulo.png" alt="Pantalla de título"><br><sub><b>Título.</b> Arcade, combate suelto, 2 jugadores, opciones y récords.</sub></td>
-<td width="50%"><img src="docs/img/seleccion.png" alt="Selección de candidato"><br><sub><b>Selección.</b> Estadísticas y especial de cada candidato.</sub></td>
+<td width="50%"><img src="docs/img/seleccion.png" alt="Selección de candidato"><br><sub><b>Selección.</b> Estadísticas, especial y golpe propio de cada candidato.</sub></td>
+</tr>
+<tr>
+<td><img src="docs/img/vs.png" alt="Pantalla de VS con retratos grandes"><br><sub><b>VS.</b> Retratos grandes y la frase de cada candidato.</sub></td>
+<td><img src="docs/img/agarre.png" alt="Agarre"><br><sub><b>Agarre.</b> Pegado al rival, adelante + puño.</sub></td>
+</tr>
+<tr>
+<td><img src="docs/img/entrenamiento.png" alt="Modo entrenamiento con cajas de golpe"><br><sub><b>Entrenamiento.</b> Cajas de golpe, historial de botones y daño del combo.</sub></td>
+<td><img src="docs/img/movimientos.png" alt="Lista de movimientos"><br><sub><b>Movimientos.</b> La lista de cada candidato, en la pausa.</sub></td>
 </tr>
 <tr>
 <td><img src="docs/img/combo.png" alt="Combo de tres golpes"><br><sub><b>Combos.</b> Puño, patada y especial: 3 HITS.</sub></td>
@@ -83,7 +104,7 @@ Juego de lucha 2D al estilo de las recreativas de los 90, con políticos fictici
 </tr>
 <tr>
 <td><img src="docs/img/continuar.png" alt="Pantalla de continuar"><br><sub><b>¿Seguir en política?</b> Cuenta atrás para continuar.</sub></td>
-<td><img src="docs/img/opciones.png" alt="Opciones"><br><sub><b>Opciones.</b> Se guardan en el dispositivo.</sub></td>
+<td><img src="docs/img/como-se-juega.png" alt="Tutorial cómo se juega"><br><sub><b>Cómo se juega.</b> Tutorial animado desde el menú.</sub></td>
 </tr>
 </table>
 
@@ -124,12 +145,27 @@ Todos comparten la super **Moción de Censura**, una urna gigante que cae sobre 
 | Super | `J` | `P` |
 | Pausa | `Esc` | `Esc` |
 
-Jugando contra la CPU, el jugador 1 también puede usar las flechas y `Z` `X` `C` `V`.
+Jugando contra la CPU, el jugador 1 también puede usar las flechas y `Z` `X` `C` `V`. Las teclas del jugador 1 se pueden cambiar en **Opciones → Teclas**.
+
+### Mando
+
+| Botón | Acción |
+|---|---|
+| Cruceta o stick izquierdo | Moverse |
+| A / ✕ | Puño (aceptar en los menús) |
+| B / ○ | Patada (volver en los menús) |
+| X / □ | Especial |
+| Y / △ o RB / R1 | Super |
+| Start / Options | Pausa |
+
+El primer mando es el jugador 1 y el segundo, el jugador 2.
 
 ## Combos y movimientos
 
 | Movimiento | Cómo |
 |---|---|
+| Agarre | Pegado al rival: `→` + puño (o `←` + puño para lanzarlo por detrás). No se puede bloquear |
+| Golpe propio | `→` + patada |
 | Especial | `↓` `↘` `→` + puño, o el botón de especial |
 | Especial (alternativo) | `↓` `↙` `←` + patada |
 | Super | `↓` `↘` `→` `↓` `↘` `→` + puño con la barra llena, o el botón de super |
@@ -137,6 +173,18 @@ Jugando contra la CPU, el jugador 1 también puede usar las flechas y `Z` `X` `C
 | Barrido | **Agachado + patada**: derriba |
 | Puño bajo | **Agachado + puño** |
 | Patada aérea | **Salta + puño o patada** |
+
+**Golpes propios:**
+
+| Candidato | Golpe | Detalle |
+|---|---|---|
+| Don Promesas | Apretón de manos | Avanza mientras golpea |
+| Ministra Recortes | Carpetazo | Alto: hay que pararlo de pie |
+| El Barón | Cabezazo | Mucho daño a corta distancia |
+| Doña Encuesta | Patada de muestra | Bajo y muy largo: hay que pararlo agachado |
+| El Lobby | Sobre | Carga extra de la barra de super |
+
+El barrido también es un golpe bajo.
 
 **Cómo encadenar:** si un golpe conecta, puedes cancelarlo en el siguiente antes de que el rival se recupere.
 
@@ -230,9 +278,8 @@ hemiciclo-fighters/
 
 - [ ] Editor de candidatos: nombre, colores, peinado y frases
 - [ ] Modo supervivencia: todos contra ti con una sola barra de vida
-- [ ] Llaves y lanzamientos cuerpo a cuerpo
-- [ ] Mando físico con la Gamepad API
 - [ ] Tabla de récords con iniciales
+- [ ] Escapar de los agarres pulsando puño a tiempo
 
 ---
 
