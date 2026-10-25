@@ -26,11 +26,18 @@ Todos comparten la super: **Moción de Censura**, que se carga llenando la barra
 | Patada | G | L |
 | Especial | H | O |
 | Super | J | P |
+| Pausa | Esc | Esc |
 
 - Mantén hacia atrás para cubrirte.
 - Agachado + patada derriba al rival.
 - Contra la CPU también valen las flechas y Z / X / C / V.
-- En móvil aparecen controles táctiles.
+
+## En el móvil
+
+- Juega mejor en horizontal: la cruceta queda a la izquierda y los botones a la derecha.
+- La cruceta se desliza: mantén el dedo y muévelo para andar, saltar en diagonal o agacharte.
+- Toca el reloj de arriba para pausar.
+- En Android, el botón **AMPLIAR** pone el juego a pantalla completa. En iPhone, usa *Compartir → Añadir a pantalla de inicio* para abrirlo sin barras del navegador.
 
 ## Ejecutar en local
 

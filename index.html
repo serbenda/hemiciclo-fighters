@@ -2,14 +2,18 @@
 <html lang="es">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0f0a16">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="description" content="Juego de lucha 2D estilo recreativa de los 90 con políticos ficticios.">
 <title>Hemiciclo Fighters</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rubik:wght@400;600&display=swap" rel="stylesheet">
 <style>
-/* Layout: una recreativa de una sola pantalla; cabecera mínima, canvas 16:9 y tira de controles debajo */
+/* Layout: recreativa de una pantalla. Vertical: pantalla arriba y mandos debajo. Horizontal táctil: cruceta | pantalla | botones */
 :root{
   --bg:#0f0a16;
   --panel:#1b1328;
@@ -22,11 +26,14 @@
   --body:'Rubik', system-ui, -apple-system, sans-serif;
   color-scheme:dark;
 }
+*{-webkit-tap-highlight-color:transparent}
 *,*::before,*::after{box-sizing:border-box}
 html,body{height:100%}
-body{margin:0}
+body{margin:0;font-size:14px}
+img{max-width:100%}
+[hidden]{display:none!important}
 body{
-  background:var(--bg);color:var(--fg);font-family:var(--body);
+  background:var(--bg);color:var(--fg);font-family:var(--body);overscroll-behavior:none;
   padding-left:max(16px, env(safe-area-inset-left, 0px));
   padding-right:max(16px, env(safe-area-inset-right, 0px));
 }
@@ -37,27 +44,45 @@ h1 span{color:var(--hot);text-shadow:2px 2px 0 #3a0d18}
 .tools{display:flex;gap:8px;align-items:center}
 .btn{font-family:var(--px);font-size:9px;background:var(--panel);color:var(--fg);border:2px solid var(--line);padding:8px 10px;border-radius:3px;cursor:pointer}
 .btn:hover{border-color:var(--gold)}
-.btn:focus-visible,.pad button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
-.screen{position:relative;border:4px solid #2a1f3d;border-radius:6px;background:#000;box-shadow:0 0 0 2px #000, 0 18px 40px rgba(0,0,0,.5)}
+.btn:focus-visible,.btns button:focus-visible{outline:2px solid var(--gold);outline-offset:2px}
+.stage{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"screen";gap:14px;align-items:center;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.screen{grid-area:screen;min-width:0;border:4px solid #2a1f3d;border-radius:6px;background:#000;box-shadow:0 0 0 2px #000, 0 18px 40px rgba(0,0,0,.5)}
 canvas{display:block;width:100%;aspect-ratio:16/9;max-width:100%;image-rendering:pixelated;image-rendering:crisp-edges;touch-action:none;cursor:pointer}
+.dpad,.btns{display:none}
+.dpad{grid-area:dpad;position:relative;width:150px;height:150px;border-radius:50%;justify-self:start;touch-action:none;
+  background:radial-gradient(circle at 50% 50%, #2a1f3d 0 18%, #1b1328 19% 100%);border:2px solid var(--line)}
+.dpad span{position:absolute;width:30%;height:30%;display:grid;place-items:center;font-size:16px;color:var(--dim);background:var(--panel);border:2px solid var(--line);border-radius:10px;pointer-events:none}
+.dpad .u{left:35%;top:4%}.dpad .d{left:35%;bottom:4%}.dpad .l{left:4%;top:35%}.dpad .r{right:4%;top:35%}
+.dpad span.on{color:var(--gold);border-color:var(--gold);background:#2a1f3d}
+.btns{grid-area:btns;grid-template-columns:repeat(2,72px);gap:10px;justify-self:end;touch-action:none}
+.btns button{height:60px;font-family:var(--px);font-size:8px;color:var(--fg);background:var(--panel);border:2px solid var(--line);border-bottom-width:5px;border-radius:10px;touch-action:none;padding:0}
+.btns button[data-k="punch"]{border-color:var(--gold)}
+.btns button[data-k="kick"]{border-color:#9fe3ff}
+.btns button[data-k="special"]{border-color:#2aa6d6}
+.btns button[data-k="super"]{border-color:var(--hot)}
+.btns button.on{transform:translateY(3px);border-bottom-width:2px;background:#2a1f3d}
 .legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px 24px;font-size:13px;color:var(--dim);line-height:1.7}
 .legend b{color:var(--fg);font-weight:600;display:block;font-size:12px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:2px}
 kbd{font-family:var(--px);font-size:9px;color:var(--fg);background:var(--panel);border:1px solid var(--line);border-bottom-width:3px;border-radius:3px;padding:2px 5px;margin:0 1px}
-.note{font-size:12px;color:var(--dim);margin:0}
-.pad{display:none;justify-content:space-between;align-items:center;gap:16px;user-select:none;-webkit-user-select:none;touch-action:none}
-.dpad{display:grid;grid-template-columns:repeat(3,54px);grid-template-rows:repeat(3,54px);gap:4px}
-.dpad .u{grid-area:1/2}.dpad .l{grid-area:2/1}.dpad .r{grid-area:2/3}.dpad .d{grid-area:3/2}
-.btns{display:grid;grid-template-columns:repeat(2,78px);gap:8px}
-.pad button{font-family:var(--px);font-size:9px;color:var(--fg);background:var(--panel);border:2px solid var(--line);border-bottom-width:5px;border-radius:8px;touch-action:none;-webkit-tap-highlight-color:transparent}
-.btns button{height:56px}
-.btns button[data-k="special"]{border-color:#2aa6d6}
-.btns button[data-k="super"]{border-color:var(--hot)}
-.btns button[data-k="punch"]{border-color:var(--gold)}
-.pad button.on{transform:translateY(3px);border-bottom-width:2px;background:#2a1f3d}
-body.touch .pad{display:flex}
+.note,.rotate{font-size:12px;color:var(--dim);margin:0}
+.rotate{display:none;text-align:center;font-size:13px;color:var(--fg)}
+body.touch .dpad{display:block}
+body.touch .btns{display:grid}
 body.touch .legend{display:none}
-@media (pointer:coarse){.pad{display:flex}.legend{display:none}}
-@media (max-width:420px){.dpad{grid-template-columns:repeat(3,46px);grid-template-rows:repeat(3,46px)}.btns{grid-template-columns:repeat(2,68px)}}
+body.touch .rotate{display:block}
+body.touch .stage{grid-template-columns:auto auto;grid-template-areas:"screen screen" "dpad btns";justify-content:space-between}
+@media (orientation:landscape){
+  body.touch .wrap{max-width:none;padding-block:6px;gap:0}
+  body.touch h1,body.touch .note,body.touch .rotate{display:none}
+  body.touch header{position:fixed;z-index:5;top:calc(env(safe-area-inset-top, 0px) + 6px);right:max(10px, env(safe-area-inset-right, 0px))}
+  body.touch .btn{font-size:8px;padding:6px 7px}
+  body.touch .stage{grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"dpad screen btns";gap:12px;height:calc(100dvh - 12px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))}
+  body.touch .screen{justify-self:center;width:min(100%, calc((100dvh - 28px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) * 16 / 9))}
+  body.touch .dpad{width:136px;height:136px}
+  body.touch .btns{grid-template-columns:repeat(2,64px)}
+  body.touch .btns button{height:56px}
+}
+@media (max-width:380px){body.touch .dpad{width:132px;height:132px}body.touch .btns{grid-template-columns:repeat(2,64px)}}
 </style>
 </head>
 <body>
@@ -66,20 +91,17 @@ body.touch .legend{display:none}
   <header>
     <h1>HEMICICLO <span>FIGHTERS</span></h1>
     <div class="tools">
+      <button class="btn" id="fs" type="button" hidden>AMPLIAR</button>
       <button class="btn" id="mute" type="button" aria-pressed="false">SONIDO: SÍ</button>
     </div>
   </header>
 
-  <div class="screen"><canvas id="game" width="480" height="270" aria-label="Juego de lucha Hemiciclo Fighters"></canvas></div>
-
-  <div class="pad" id="pad" aria-label="Controles táctiles">
-    <div class="dpad">
-      <button type="button" data-k="up" class="u" aria-label="Saltar">▲</button>
-      <button type="button" data-k="left" class="l" aria-label="Izquierda">◀</button>
-      <button type="button" data-k="right" class="r" aria-label="Derecha">▶</button>
-      <button type="button" data-k="down" class="d" aria-label="Agacharse">▼</button>
+  <div class="stage">
+    <div class="dpad" id="dpad" aria-label="Cruceta: mantén y desliza el dedo para moverte, saltar o agacharte">
+      <span class="u">▲</span><span class="l">◀</span><span class="r">▶</span><span class="d">▼</span>
     </div>
-    <div class="btns">
+    <div class="screen"><canvas id="game" width="480" height="270" aria-label="Juego de lucha Hemiciclo Fighters"></canvas></div>
+    <div class="btns" id="btns" aria-label="Botones de ataque">
       <button type="button" data-k="punch">PUÑO</button>
       <button type="button" data-k="kick">PATADA</button>
       <button type="button" data-k="special">ESPECIAL</button>
@@ -87,10 +109,12 @@ body.touch .legend{display:none}
     </div>
   </div>
 
+  <p class="rotate">Gira el móvil para jugar en horizontal.</p>
+
   <div class="legend">
     <div><b>Jugador 1</b><kbd>A</kbd><kbd>D</kbd> moverse · <kbd>W</kbd> saltar · <kbd>S</kbd> agacharse<br><kbd>F</kbd> puño · <kbd>G</kbd> patada · <kbd>H</kbd> especial · <kbd>J</kbd> super<br>Contra la CPU también valen las flechas y <kbd>Z</kbd><kbd>X</kbd><kbd>C</kbd><kbd>V</kbd>.</div>
     <div><b>Jugador 2</b>Flechas para moverse<br><kbd>K</kbd> puño · <kbd>L</kbd> patada · <kbd>O</kbd> especial · <kbd>P</kbd> super</div>
-    <div><b>Trucos</b>Mantén hacia atrás para cubrirte. Agachado + patada derriba. Llena la barra de Popularidad y lanza la Moción de Censura.</div>
+    <div><b>Trucos</b>Mantén hacia atrás para cubrirte. Agachado + patada derriba. Llena la barra de Popularidad y lanza la Moción de Censura. <kbd>Esc</kbd> pausa.</div>
   </div>
   <p class="note">Personajes ficticios. Cualquier parecido con la realidad es pura tertulia.</p>
 </div>
@@ -102,6 +126,8 @@ const cv=document.getElementById('game'), ctx=cv.getContext('2d');
 const W=480,H=270,GROUND=236,GRAV=0.5;
 ctx.imageSmoothingEnabled=false;
 const REDUCED=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let IS_TOUCH=matchMedia('(pointer:coarse)').matches;
+if(IS_TOUCH)document.body.classList.add('touch');
 
 const clamp=(v,a,b)=>v<a?a:v>b?b:v;
 const pick=a=>a[(Math.random()*a.length)|0];
@@ -396,7 +422,8 @@ function doHit(att,def,d,hx,hy){
   if(d.kd||def.y<GROUND-2){def.st='down';def.t=0;def.vy=-4.5;def.vx=dir*2.4;def.atk=null;}
   else{def.st='hurt';def.t=0;def.stun=d.stun;def.vx=dir*d.push;}
   att.meter=Math.min(100,att.meter+dmg*1.6);def.meter=Math.min(100,def.meter+dmg*0.9);
-  G.shake=REDUCED?0:Math.min(8,2+dmg*0.3);G.hitstop=4;G.hype=70;sfx.hit(dmg);spark(px,py,'hit');
+  G.shake=REDUCED?0:Math.min(8,2+dmg*0.3);G.hitstop=4;
+  if(IS_TOUCH&&(att===G.f1||def===G.f1)){try{navigator.vibrate&&navigator.vibrate(def===G.f1?35:12);}catch(e){}}G.hype=70;sfx.hit(dmg);spark(px,py,'hit');
  }
  if(def.hp<=0){def.hp=0;onKO(att,def,dir);}
  return true;
@@ -554,7 +581,7 @@ function newMatch(c1,c2){
 }
 function startRound(){
  G.f1=makeFighter(CHARS[G.c[0]],-1);G.f2=makeFighter(CHARS[G.c[1]],1);
- G.proj=[];G.parts=[];G.phase='intro';G.pt=0;G.timer=99;G.tick=0;G.freeze=0;G.hitstop=0;G.slow=0;G.shake=0;G.hype=0;G.winner=-1;
+ G.proj=[];G.parts=[];G.paused=false;G.pauseT=0;G.phase='intro';G.pt=0;G.timer=99;G.tick=0;G.freeze=0;G.hitstop=0;G.slow=0;G.shake=0;G.hype=0;G.winner=-1;
 }
 function timeUp(){G.phase='timeup';G.pt=0;sfx.bell();
  const a=G.f1.hp,b=G.f2.hp;G.winner=Math.abs(a-b)<0.5?-1:a>b?0:1;}
@@ -565,6 +592,7 @@ function endRound(){
 }
 
 function fightUpdate(){
+ if(G.paused){G.pauseT++;if(G.pauseT>3){if(MENU.p('ok'))G.paused=false;else if(MENU.p('back')&&!held.has('Escape'))scene='title';}return;}
  G.t++;
  if(G.freeze>0){G.freeze--;return;}
  if(G.hitstop>0){G.hitstop--;return;}
@@ -632,6 +660,7 @@ function fightDraw(){
  R(222,4,36,24,'#000');R(224,6,32,20,'#1d1430');txt(String(Math.max(0,G.timer)).padStart(2,'0'),240,8,16,'#ffcf3a','center',1);
  txt(G.f1.ch.name,14,25,8,'#ffffff','left',1);txt(G.f2.ch.name,W-14,25,8,'#ffffff','right',1);
  for(let i=0;i<2;i++){ballotIcon(208-i*11,31,G.wins[0]>i);ballotIcon(264+i*11,31,G.wins[1]>i);}
+ if(IS_TOUCH&&G.phase==='go'){R(235,31,3,8,'#c9bfdc');R(241,31,3,8,'#c9bfdc');}
  meterBar(G.f1,14,false);meterBar(G.f2,W-14-96,true);
  // anuncios
  const big=(s,c,size=24,y=104)=>txt(s,240,y,size,c,'center',2);
@@ -649,6 +678,14 @@ function fightDraw(){
  if(G.freeze>0){const f=G.freezeBy,k=Math.min(1,(50-G.freeze)/8);
   const bw=Math.round(W*k);R(f===G.f1?0:W-bw,96,bw,46,f.ch.suit);R(f===G.f1?0:W-bw,96,bw,2,'#ffcf3a');R(f===G.f1?0:W-bw,140,bw,2,'#ffcf3a');
   if(k>=1){txt('MOCIÓN DE CENSURA',240,106,16,'#ffffff','center',2);txt(f.ch.name,240,128,8,'#ffcf3a','center',1);}}
+ if(G.paused){ctx.fillStyle='rgba(8,4,20,.8)';ctx.fillRect(0,0,W,H);txt('PAUSA',240,66,24,'#ffcf3a','center',2);
+  R(150,118,180,28,'#2a1f3d');R(150,118,3,28,'#ffcf3a');txt('SEGUIR',240,128,8,'#ffcf3a','center',0);
+  R(150,154,180,28,'#2a1f3d');R(150,154,3,28,'#ff4f6d');txt('SALIR AL MENÚ',240,164,8,'#ff4f6d','center',0);
+  txt(IS_TOUCH?'PUÑO: SEGUIR · PATADA: SALIR':'F O ESC: SEGUIR · G: SALIR',240,204,8,'#9a8fae','center',0);}
+}
+function fightTap(p){
+ if(G.paused){if(p.y>=114&&p.y<150)G.paused=false;else if(p.y>=150&&p.y<188)scene='title';return;}
+ if(G.phase==='go'&&p.x>196&&p.x<284&&p.y<44){G.paused=true;G.pauseT=0;}
 }
 
 function menuBg(a,b){
@@ -659,7 +696,8 @@ function menuBg(a,b){
 }
 
 function titleUpdate(){
- if(MENU.p('up')||MENU.p('down')){titleOpt=1-titleOpt;sfx.sel();}
+ if(IS_TOUCH)titleOpt=0;
+ else if(MENU.p('up')||MENU.p('down')){titleOpt=1-titleOpt;sfx.sel();}
  if(MENU.p('ok')){startFromTitle();}
 }
 function startFromTitle(){mode=titleOpt===0?1:2;sfx.ok();Object.assign(sel,{l1:false,l2:false,t:0,roll:0,c1:lastPick[0],c2:lastPick[1]});scene='select';}
@@ -671,14 +709,14 @@ function titleDraw(){
  txt('EDICIÓN TURBO LEGISLATURA',240,96,8,'#c9bfdc','center',1);
  const a={...makeFighter(CHARS[0],-1),x:72,sc:1.5},b={...makeFighter(CHARS[2],1),x:408,sc:1.35};
  a.st=b.st='idle';shadow(a);shadow(b);drawFighter(a);drawFighter(b);
- const opts=['1 JUGADOR VS CPU','2 JUGADORES'];
+ const opts=IS_TOUCH?['1 JUGADOR VS CPU']:['1 JUGADOR VS CPU','2 JUGADORES'];
  opts.forEach((o,i)=>{const y=134+i*20,on=titleOpt===i;if(on){R(150,y-4,180,16,'#2a1f3d');R(150,y-4,3,16,'#ffcf3a');}
   txt(o,240,y,8,on?'#ffcf3a':'#9a8fae','center',1);});
- if(Math.floor(frame/30)%2)txt('PULSA F O TOCA PARA VOTAR',240,184,8,'#ffffff','center',1);
+ if(Math.floor(frame/30)%2)txt(IS_TOUCH?'TOCA LA PANTALLA PARA VOTAR':'PULSA F O TOCA PARA VOTAR',240,184,8,'#ffffff','center',1);
  txt('PERSONAJES FICTICIOS. NINGÚN PARTIDO',240,236,8,'#6f6487','center',0);
  txt('HA SIDO DAÑADO EN ESTE JUEGO.',240,248,8,'#6f6487','center',0);
 }
-function titleTap(p){if(p.y>128&&p.y<150){titleOpt=0;startFromTitle();}else if(p.y>=150&&p.y<172){titleOpt=1;startFromTitle();}else startFromTitle();}
+function titleTap(p){if(IS_TOUCH){titleOpt=0;startFromTitle();return;}if(p.y>128&&p.y<150){titleOpt=0;startFromTitle();}else if(p.y>=150&&p.y<172){titleOpt=1;startFromTitle();}else startFromTitle();}
 
 const CARD={w:96,h:120,gap:12,x0:30,y0:36};
 function selectUpdate(){
@@ -724,7 +762,7 @@ function selectDraw(){
  txt(c.name,24,y+8,8,'#ffcf3a','left',1);txt('ESPECIAL: '+c.spName,W-24,y+8,8,'#9fe3ff','right',1);
  ['VELOCIDAD','PEGADA','AGUANTE'].forEach((l,k)=>{txt(l,24,y+24+k*12,8,'#c9bfdc','left',0);for(let j=0;j<5;j++)R(116+j*12,y+24+k*12,10,7,j<c.stats[k]?c.tie:'#2a1f3d');});
  wrap(c.bio,24).forEach((l,k)=>txt(l,W-24,y+24+k*11,8,'#efe6d2','right',0));
- txt(mode===2?'1P: A D + F · 2P: ← → + K':'← → ELEGIR · F CONFIRMAR · G VOLVER',240,y+66,8,'#6f6487','center',0);
+ txt(IS_TOUCH?'TOCA UN CANDIDATO PARA ELEGIRLO':mode===2?'1P: A D + F · 2P: ← → + K':'← → ELEGIR · F CONFIRMAR · G VOLVER',240,y+66,8,'#6f6487','center',0);
 }
 function selectTap(p){
  for(let i=0;i<4;i++){const x=CARD.x0+i*(CARD.w+CARD.gap);if(p.x>=x&&p.x<=x+CARD.w&&p.y>=CARD.y0&&p.y<=CARD.y0+CARD.h){
@@ -760,7 +798,7 @@ function resultDraw(){
  txt('CAE '+result.loser.name,318,by+bh+14,8,'#9a8fae','center',1);
  if(result.t>40){R(214,206,108,20,'#2a1f3d');R(214,206,3,20,'#ffcf3a');txt('REVANCHA',268,212,8,'#ffcf3a','center',0);
   R(332,206,132,20,'#2a1f3d');R(332,206,3,20,'#9fe3ff');txt('CANDIDATOS',398,212,8,'#9fe3ff','center',0);
-  txt('F REVANCHA · G CAMBIAR',339,236,8,'#6f6487','center',0);}
+  if(!IS_TOUCH)txt('F REVANCHA · G CAMBIAR',339,236,8,'#6f6487','center',0);}
 }
 function resultTap(p){if(result.t<40)return;if(p.x>=332&&p.y>196){Object.assign(sel,{l1:false,l2:false,t:0,roll:0});scene='select';}else{vsT=0;scene='vs';}sfx.ok();}
 
@@ -768,25 +806,54 @@ const SCENES={
  title:{u:titleUpdate,d:titleDraw,tap:titleTap},
  select:{u:selectUpdate,d:selectDraw,tap:selectTap},
  vs:{u:vsUpdate,d:vsDraw,tap:()=>{if(vsT>30){newMatch(lastPick[0],lastPick[1]);scene='fight';}}},
- fight:{u:fightUpdate,d:fightDraw,tap:()=>{}},
+ fight:{u:fightUpdate,d:fightDraw,tap:fightTap},
  result:{u:resultUpdate,d:resultDraw,tap:resultTap}
 };
 
 /* ---------- Bucle ---------- */
 function step(){frame++;P1.poll();P2.poll();MENU.poll();MENU2.poll();
- if(scene==='fight'&&MENU.p('back')&&held.has('Escape')){scene='title';return;}
+ const esc=held.has('Escape');if(scene==='fight'&&esc&&!escPrev&&G.phase!=='intro'){G.paused=!G.paused;G.pauseT=0;}escPrev=esc;
  SCENES[scene].u();}
-let acc=0,last=performance.now();
+let escPrev=false,acc=0,last=performance.now();
 function loop(now){acc+=Math.min(100,now-last);last=now;let n=0;while(acc>=1000/60&&n<6){step();acc-=1000/60;n++;}
  ctx.imageSmoothingEnabled=false;SCENES[scene].d();requestAnimationFrame(loop);}
 
 cv.addEventListener('pointerdown',e=>{audioInit();const r=cv.getBoundingClientRect();SCENES[scene].tap({x:(e.clientX-r.left)*W/r.width,y:(e.clientY-r.top)*H/r.height});});
-document.querySelectorAll('#pad button').forEach(b=>{const k=b.dataset.k;
+document.querySelectorAll('#btns button').forEach(b=>{const k=b.dataset.k;
  const on=e=>{e.preventDefault();audioInit();touch[k]=true;b.classList.add('on');try{b.setPointerCapture(e.pointerId);}catch(_){}};
  const off=()=>{touch[k]=false;b.classList.remove('on');};
  b.addEventListener('pointerdown',on);b.addEventListener('pointerup',off);b.addEventListener('pointercancel',off);b.addEventListener('lostpointercapture',off);
  b.addEventListener('contextmenu',e=>e.preventDefault());});
-addEventListener('touchstart',()=>document.body.classList.add('touch'),{once:true,passive:true});
+addEventListener('touchstart',()=>{IS_TOUCH=true;document.body.classList.add('touch');},{once:true,passive:true});
+
+/* Cruceta deslizable de 8 direcciones */
+const dp=document.getElementById('dpad'),dpS={};dp.querySelectorAll('span').forEach(el=>dpS[el.className]=el);
+let dpId=null;
+function dpSet(e){const r=dp.getBoundingClientRect(),dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2),ax=Math.abs(dx),ay=Math.abs(dy);
+ const far=Math.hypot(dx,dy)>r.width*0.13;
+ touch.left=far&&dx<0&&ax>ay*0.45;touch.right=far&&dx>0&&ax>ay*0.45;touch.up=far&&dy<0&&ay>ax*0.45;touch.down=far&&dy>0&&ay>ax*0.45;
+ dpS.u.classList.toggle('on',touch.up);dpS.d.classList.toggle('on',touch.down);dpS.l.classList.toggle('on',touch.left);dpS.r.classList.toggle('on',touch.right);}
+function dpClear(){touch.left=touch.right=touch.up=touch.down=false;for(const k in dpS)dpS[k].classList.remove('on');}
+dp.addEventListener('pointerdown',e=>{e.preventDefault();audioInit();if(dpId!==null)return;dpId=e.pointerId;try{dp.setPointerCapture(e.pointerId);}catch(_){}dpSet(e);});
+dp.addEventListener('pointermove',e=>{if(e.pointerId===dpId)dpSet(e);});
+const dpEnd=e=>{if(e.pointerId===dpId){dpId=null;dpClear();}};
+['pointerup','pointercancel','lostpointercapture'].forEach(t=>dp.addEventListener(t,dpEnd));
+for(const el of [dp,document.getElementById('btns')])el.addEventListener('touchstart',e=>e.preventDefault(),{passive:false});
+document.addEventListener('gesturestart',e=>e.preventDefault());
+document.addEventListener('visibilitychange',()=>{if(document.hidden){held.clear();for(const k in touch)touch[k]=false;dpId=null;dpClear();if(scene==='fight'&&G&&G.phase==='go'){G.paused=true;G.pauseT=0;}}});
+/* Pantalla completa (si el navegador la permite) */
+const fsBtn=document.getElementById('fs'),docEl=document.documentElement;
+const fsReq=docEl.requestFullscreen||docEl.webkitRequestFullscreen;
+const fsOn=()=>document.fullscreenElement||document.webkitFullscreenElement;
+if(fsReq&&(document.fullscreenEnabled||document.webkitFullscreenEnabled)){
+ fsBtn.hidden=false;
+ fsBtn.addEventListener('click',async()=>{audioInit();
+  try{if(fsOn()){(document.exitFullscreen||document.webkitExitFullscreen).call(document);}
+   else{await fsReq.call(docEl);try{await screen.orientation.lock('landscape');}catch(_){}}}
+  catch(e){fsBtn.hidden=true;}});
+ const fsLabel=()=>{fsBtn.textContent=fsOn()?'REDUCIR':'AMPLIAR';};
+ document.addEventListener('fullscreenchange',fsLabel);document.addEventListener('webkitfullscreenchange',fsLabel);
+}
 
 const go=()=>requestAnimationFrame(t=>{last=t;loop(t);});
 if(document.fonts&&document.fonts.load){Promise.race([document.fonts.load('8px "Press Start 2P"'),new Promise(r=>setTimeout(r,1500))]).then(go,go);}else go();
