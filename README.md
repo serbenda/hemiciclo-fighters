@@ -4,7 +4,7 @@
 
 **Cuatro candidatos. Un hemiciclo. Ninguna propuesta.**
 
-Juego de lucha 2D al estilo de las recreativas de los 90, con políticos ficticios y golpes especiales sacados del día a día parlamentario.
+Juego de lucha 2D al estilo de las recreativas de los 90, con políticos ficticios, combos, golpes especiales y un jefe final que nunca se presenta a las elecciones.
 
 [![Jugar ahora](https://img.shields.io/badge/▶_JUGAR_AHORA-ffcf3a?style=for-the-badge&labelColor=0f0a16)](https://serbenda.github.io/hemiciclo-fighters/)
 
@@ -12,10 +12,11 @@ Juego de lucha 2D al estilo de las recreativas de los 90, con políticos fictici
 ![JavaScript](https://img.shields.io/badge/JavaScript-vanilla-f7df1e?logo=javascript&logoColor=black)
 ![Sin dependencias](https://img.shields.io/badge/dependencias-0-2e9a4f)
 ![Móvil](https://img.shields.io/badge/móvil-táctil-2f5fc4)
+![Sin conexión](https://img.shields.io/badge/funciona-sin_conexión-c23a32)
 
 <br><br>
 
-<img src="docs/img/combate.gif" alt="Don Promesas contra Doña Encuesta en el hemiciclo" width="720">
+<img src="docs/img/combate.gif" alt="El Barón contra Don Promesas en el hemiciclo" width="720">
 
 </div>
 
@@ -23,39 +24,66 @@ Juego de lucha 2D al estilo de las recreativas de los 90, con políticos fictici
 
 ## Índice
 
-- [Cómo se juega](#cómo-se-juega)
+- [Novedades de la versión 2](#novedades-de-la-versión-2)
+- [Modos de juego](#modos-de-juego)
 - [Capturas](#capturas)
 - [Candidatos](#candidatos)
 - [Controles](#controles)
+- [Combos y movimientos](#combos-y-movimientos)
 - [En el móvil](#en-el-móvil)
 - [Reglas del combate](#reglas-del-combate)
+- [Escenarios](#escenarios)
+- [Instalar como app](#instalar-como-app)
 - [Ejecutar en local](#ejecutar-en-local)
-- [Estructura del proyecto](#estructura-del-proyecto)
+- [Cómo está hecho](#cómo-está-hecho)
 - [Flujo de trabajo](#flujo-de-trabajo)
-- [Ideas para próximas versiones](#ideas-para-próximas-versiones)
 
-## Cómo se juega
+## Novedades de la versión 2
 
-1. Elige modo: **1 jugador contra la CPU** o **2 jugadores** en el mismo teclado.
-2. Escoge candidato.
-3. Gana el debate llevándote **2 de 3 rondas**: deja al rival sin vida o termina con más vida cuando se acabe el tiempo.
+- **Golpes con peso**: cada impacto congela la acción un instante, más largo cuanto más fuerte es el golpe, con temblor de pantalla, destello y sonido distinto para golpes ligeros, fuertes y la super.
+- **Combos** con contador en pantalla (`3 HITS`), encadenando puño → patada → especial. El daño baja un poco con cada golpe del combo.
+- **Especiales con secuencia**: ↓↘→ + puño, como en las recreativas. Los botones de especial y super siguen funcionando.
+- **Modo arcade** con jefe final secreto, fase de bonus, pantalla de continuar, puntuación y un final distinto para cada candidato.
+- **CPU con tres niveles** de dificultad. En difícil se cubre, castiga los fallos, para los saltos y hace combos.
+- **Música chiptune** propia para cada escenario y para el jefe, generada en el navegador.
+- **Voz del presentador**: "Ronda uno", "¡A debate!", "¡K.O.!", "¡Mayoría absoluta!".
+- **Nuevo escenario**: el mitin en la plaza del pueblo.
+- **Más animación**: preparación y recuperación de cada golpe, dos tipos de caída y un público que se levanta con pancartas.
+- **Opciones y récords** guardados en el dispositivo: dificultad, música, efectos, voces y tamaño de los botones táctiles.
+- **Modo demo**: si nadie toca nada en el título, la CPU juega sola.
+- **App instalable** que funciona sin conexión.
 
-Cada golpe que das o recibes llena tu barra de **Popularidad**. Cuando está llena, puedes lanzar la **Moción de Censura**: una urna gigante cae del cielo sobre tu rival.
+## Modos de juego
+
+| Modo | Descripción |
+|---|---|
+| **Arcade** | Dos rivales, la fase de bonus del coche oficial, un tercer rival y el jefe final. Al perder puedes seguir a cambio de la mitad de los puntos. |
+| **1 jugador vs CPU** | Un combate suelto contra un rival al azar. |
+| **2 jugadores** | Dos personas en el mismo teclado. |
+| **Demo** | Arranca sola en el título tras 15 segundos sin tocar nada. |
 
 ## Capturas
 
 <table>
 <tr>
-<td width="50%"><img src="docs/img/titulo.png" alt="Pantalla de título"><br><sub><b>Título.</b> Elige entre 1 jugador contra la CPU o 2 jugadores.</sub></td>
-<td width="50%"><img src="docs/img/seleccion.png" alt="Selección de candidato"><br><sub><b>Selección.</b> Cada candidato tiene sus estadísticas y su especial.</sub></td>
+<td width="50%"><img src="docs/img/titulo.png" alt="Pantalla de título"><br><sub><b>Título.</b> Arcade, combate suelto, 2 jugadores, opciones y récords.</sub></td>
+<td width="50%"><img src="docs/img/seleccion.png" alt="Selección de candidato"><br><sub><b>Selección.</b> Estadísticas y especial de cada candidato.</sub></td>
 </tr>
 <tr>
-<td><img src="docs/img/plato.png" alt="Combate en el plató de televisión"><br><sub><b>El plató.</b> Segundo escenario, con monitores y teletipo en directo.</sub></td>
-<td><img src="docs/img/mocion.png" alt="Moción de Censura"><br><sub><b>Moción de Censura.</b> La super, cuando la barra de Popularidad está llena.</sub></td>
+<td><img src="docs/img/combo.png" alt="Combo de tres golpes"><br><sub><b>Combos.</b> Puño, patada y especial: 3 HITS.</sub></td>
+<td><img src="docs/img/plaza.png" alt="Combate en la plaza del pueblo"><br><sub><b>La plaza.</b> El escenario nuevo, con guirnaldas y el mitin al fondo.</sub></td>
 </tr>
 <tr>
-<td><img src="docs/img/ko.png" alt="K.O. en el hemiciclo"><br><sub><b>K.O.</b> En el hemiciclo, con la bancada en pie.</sub></td>
-<td><img src="docs/img/victoria.png" alt="Pantalla de victoria"><br><sub><b>Victoria.</b> Cada candidato tiene su frase para celebrarlo.</sub></td>
+<td><img src="docs/img/bonus.png" alt="Fase de bonus del coche oficial"><br><sub><b>Fase de bonus.</b> 30 segundos para destrozar el coche oficial.</sub></td>
+<td><img src="docs/img/jefe.png" alt="Presentación del jefe final"><br><sub><b>El jefe final.</b> El Lobby aparece al final del arcade.</sub></td>
+</tr>
+<tr>
+<td><img src="docs/img/opa-hostil.png" alt="Super del jefe final"><br><sub><b>Opa Hostil.</b> La super del jefe: una caja fuerte del cielo.</sub></td>
+<td><img src="docs/img/final.png" alt="Final de la Ministra Recortes"><br><sub><b>Finales.</b> Cada candidato tiene el suyo.</sub></td>
+</tr>
+<tr>
+<td><img src="docs/img/continuar.png" alt="Pantalla de continuar"><br><sub><b>¿Seguir en política?</b> Cuenta atrás para continuar.</sub></td>
+<td><img src="docs/img/opciones.png" alt="Opciones"><br><sub><b>Opciones.</b> Se guardan en el dispositivo.</sub></td>
 </tr>
 </table>
 
@@ -65,10 +93,13 @@ Cada golpe que das o recibes llena tu barra de **Popularidad**. Cuando está lle
 
 | | Candidato | Especial | Velocidad | Pegada | Aguante |
 |---|---|---|:---:|:---:|:---:|
-| 🔵 | **Don Promesas** | *Promesa Electoral*: lanza un bocadillo con una promesa que golpea al llegar | ★★★☆☆ | ★★★☆☆ | ★★★☆☆ |
+| 🔵 | **Don Promesas** | *Promesa Electoral*: lanza un bocadillo con una promesa | ★★★☆☆ | ★★★☆☆ | ★★★☆☆ |
 | 🟢 | **Ministra Recortes** | *Tijeretazo*: unas tijeras giratorias que cruzan la pantalla | ★★★★☆ | ★★★☆☆ | ★★☆☆☆ |
-| 🔴 | **El Barón** | *Puerta Giratoria*: embestida girando dentro de una puerta giratoria que derriba | ★★☆☆☆ | ★★★★★ | ★★★★★ |
-| 🟡 | **Doña Encuesta** | *Cocina de Encuestas*: unas barras de sondeo brotan del suelo delante del rival | ★★★★★ | ★★☆☆☆ | ★★☆☆☆ |
+| 🔴 | **El Barón** | *Puerta Giratoria*: embestida dentro de una puerta giratoria que derriba | ★★☆☆☆ | ★★★★★ | ★★★★★ |
+| 🟡 | **Doña Encuesta** | *Cocina de Encuestas*: barras de sondeo que brotan del suelo | ★★★★★ | ★★☆☆☆ | ★★☆☆☆ |
+| 🟣 | **El Lobby** *(secreto)* | *Maletín*: un maletín que suelta euros al golpear | ★★★★☆ | ★★★★☆ | ★★★★☆ |
+
+Todos comparten la super **Moción de Censura**, una urna gigante que cae sobre el rival, menos El Lobby, que tiene la suya: **Opa Hostil**. El Lobby se desbloquea al completar el modo arcade con cualquier candidato.
 
 > **Don Promesas.** Lleva treinta años prometiendo lo mismo. Y le sigue funcionando.
 >
@@ -77,10 +108,10 @@ Cada golpe que das o recibes llena tu barra de **Popularidad**. Cuando está lle
 > **El Barón.** Manda en su provincia desde antes de que existieran las provincias.
 >
 > **Doña Encuesta.** Te dice quién va a ganar antes de que nadie haya votado.
+>
+> **El Lobby.** Nunca se presenta a las elecciones. No le hace falta.
 
 ## Controles
-
-### Teclado
 
 | Acción | Jugador 1 | Jugador 2 |
 |---|:---:|:---:|
@@ -95,25 +126,35 @@ Cada golpe que das o recibes llena tu barra de **Popularidad**. Cuando está lle
 
 Jugando contra la CPU, el jugador 1 también puede usar las flechas y `Z` `X` `C` `V`.
 
-### Movimientos
+## Combos y movimientos
 
 | Movimiento | Cómo |
 |---|---|
+| Especial | `↓` `↘` `→` + puño, o el botón de especial |
+| Especial (alternativo) | `↓` `↙` `←` + patada |
+| Super | `↓` `↘` `→` `↓` `↘` `→` + puño con la barra llena, o el botón de super |
 | Cubrirse | Mantén **hacia atrás** (de pie o agachado) |
-| Barrido | **Agachado + patada**: derriba al rival |
+| Barrido | **Agachado + patada**: derriba |
 | Puño bajo | **Agachado + puño** |
 | Patada aérea | **Salta + puño o patada** |
-| Moción de Censura | **Super** con la barra de Popularidad llena |
+
+**Cómo encadenar:** si un golpe conecta, puedes cancelarlo en el siguiente antes de que el rival se recupere.
+
+- Puño → puño → patada
+- Puño → patada → especial
+- Puño bajo → barrido
+- Cualquier puño o patada → especial o super
+
+Un salto con patada seguido de puño, patada y especial al aterrizar es el combo más largo que hay.
 
 ## En el móvil
 
-- Se juega mejor **en horizontal**: la cruceta queda a la izquierda, la pantalla en el centro y los botones a la derecha.
-- La **cruceta se desliza**: mantén el dedo y muévelo para andar, saltar en diagonal o agacharte sin levantarlo.
+- Se juega **en horizontal**: cruceta a la izquierda, pantalla en el centro y botones a la derecha.
+- La **cruceta se desliza**: mantén el dedo y muévelo para andar, saltar en diagonal o agacharte. También sirve para las secuencias de especiales.
 - **Toca el reloj** para pausar. El juego también se pausa solo si cambias de app.
-- En **Android**, el botón **AMPLIAR** pone el juego a pantalla completa.
-- En **iPhone**, usa *Compartir → Añadir a pantalla de inicio* para abrirlo sin las barras del navegador.
-
-En el móvil solo está disponible el modo de 1 jugador.
+- En **Opciones** puedes cambiar el tamaño de los botones.
+- Los golpes **vibran** en Android.
+- En el móvil solo están los modos de 1 jugador.
 
 ## Reglas del combate
 
@@ -122,37 +163,61 @@ En el móvil solo está disponible el modo de 1 jugador.
 | Rondas | Al mejor de 3 |
 | Tiempo por ronda | 99 segundos |
 | Fin por tiempo | Gana quien tenga más vida; con la misma vida es **empate técnico** |
-| Victoria sin recibir daño | **¡Mayoría absoluta!** |
+| Victoria sin recibir daño | **¡Mayoría absoluta!** (30.000 puntos en arcade) |
 | Golpes cubiertos | Los especiales y la super hacen algo de daño aunque te cubras |
-| Derribos | Barrido, Puerta Giratoria, Cocina de Encuestas, Moción de Censura y cualquier golpe en el aire |
+| Derribos | Barrido, Puerta Giratoria, Cocina de Encuestas, las supers y cualquier golpe en el aire |
+| Puntos (arcade) | Daño × combo, más vitalidad y tiempo restante al ganar cada ronda |
+
+## Escenarios
+
+| Escenario | Detalles |
+|---|---|
+| **El hemiciclo** | Claraboya, reloj, mesa de la presidencia y una bancada que se levanta con pancartas en cada golpe fuerte. Con luz morada cuando aparece el jefe. |
+| **El plató** | Monitores con gráficos en directo, focos y un teletipo con las últimas noticias del cara a cara. |
+| **La plaza** | Atardecer, iglesia con nido de cigüeña, guirnaldas, la tarima del mitin y el público detrás de la valla. |
+
+Cada escenario tiene su propia música.
+
+## Instalar como app
+
+Desde la web publicada:
+
+- **Android (Chrome)**: menú ⋮ → *Instalar aplicación* o *Añadir a pantalla de inicio*.
+- **iPhone (Safari)**: *Compartir* → *Añadir a pantalla de inicio*.
+- **Ordenador (Chrome o Edge)**: icono de instalar en la barra de direcciones.
+
+Una vez abierto, el juego se guarda en el dispositivo y funciona sin conexión.
 
 ## Ejecutar en local
-
-No necesita instalación, servidor ni conexión (salvo para cargar la tipografía).
 
 ```bash
 git clone https://github.com/serbenda/hemiciclo-fighters.git
 cd hemiciclo-fighters
-# abre index.html en el navegador
-```
-
-Para probarlo en el móvil desde tu red local, sírvelo y abre la IP de tu ordenador:
-
-```bash
 python3 -m http.server 8000
 # http://localhost:8000
 ```
 
-## Estructura del proyecto
+También se puede abrir `index.html` directamente en el navegador; en ese caso no se instala como app.
+
+## Cómo está hecho
 
 ```
 hemiciclo-fighters/
-├── index.html      # el juego completo: estilos, interfaz y lógica
-├── docs/img/       # capturas y GIF del README
+├── index.html             # el juego completo: estilos, interfaz y lógica
+├── manifest.webmanifest   # datos para instalarlo como app
+├── sw.js                  # guarda el juego para jugar sin conexión
+├── icons/                 # iconos de la app
+├── docs/img/              # capturas y GIF del README
 └── README.md
 ```
 
-Todo está en un único `index.html`, sin librerías ni imágenes externas. Los personajes, escenarios y efectos se dibujan con Canvas 2D a 480×270 píxeles y se escalan con `image-rendering: pixelated`. El sonido se genera con Web Audio. La tipografía es [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P).
+- **Sin librerías ni imágenes externas.** Personajes, escenarios y efectos se dibujan con Canvas 2D a 480×270 píxeles y se escalan con `image-rendering: pixelated`.
+- **Bucle fijo a 60 fotogramas por segundo**, con congelación de impacto, cámara lenta en el K.O. y pausa.
+- **Golpes por fotogramas**: cada ataque tiene arranque, fase activa y recuperación, con su caja de golpe y la de daño del rival.
+- **Secuencias de botones** leídas de un historial de direcciones en notación numérica (2 = abajo, 3 = abajo-adelante, 6 = adelante).
+- **Música y efectos** con Web Audio: osciladores y ruido, sin archivos de sonido. La voz usa la síntesis de voz del navegador.
+- **Opciones y récords** en `localStorage`.
+- Tipografía [Press Start 2P](https://fonts.google.com/specimen/Press+Start+2P).
 
 ## Flujo de trabajo
 
@@ -161,27 +226,13 @@ Todo está en un único `index.html`, sin librerías ni imágenes externas. Los 
 | `main` | Versión publicada en GitHub Pages |
 | `development` | Desarrollo; los cambios llegan a `main` mediante pull request |
 
-1. Trabaja en `development` (o en una rama que salga de ella).
-2. Abre una PR `development → main`.
-3. Al fusionarla, GitHub Pages publica la nueva versión.
-
-## Escenarios
-
-| Escenario | Detalles |
-|---|---|
-| **El hemiciclo** | Claraboya, reloj, mesa de la presidencia y una bancada que se levanta con cada golpe fuerte |
-| **El plató** | Monitores con gráficos en directo, focos y un teletipo con las últimas noticias del cara a cara |
-
-El escenario se elige al azar en cada combate.
-
 ## Ideas para próximas versiones
 
 - [ ] Editor de candidatos: nombre, colores, peinado y frases
-- [ ] Más escenarios: pleno del Senado, mitin en la plaza del pueblo, plató de tertulia nocturna
-- [ ] Niveles de dificultad de la CPU
-- [ ] Modo campaña: ganar a todos los candidatos seguidos
-- [ ] Combos y movimientos con secuencias de botones
-- [ ] Música de fondo
+- [ ] Modo supervivencia: todos contra ti con una sola barra de vida
+- [ ] Llaves y lanzamientos cuerpo a cuerpo
+- [ ] Mando físico con la Gamepad API
+- [ ] Tabla de récords con iniciales
 
 ---
 
