@@ -79,10 +79,10 @@ body.touch .stage{grid-template-columns:auto auto;grid-template-areas:"screen sc
   body.touch .stage{grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"dpad screen btns";gap:12px;height:calc(100dvh - 12px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))}
   body.touch .screen{justify-self:center;width:min(100%, calc((100dvh - 28px - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px)) * 16 / 9))}
   body.touch .dpad{width:136px;height:136px}
-  body.touch .btns{grid-template-columns:repeat(2,64px)}
+  body.touch .btns{grid-template-columns:repeat(2,72px);gap:8px}
   body.touch .btns button{height:56px}
 }
-@media (max-width:380px){body.touch .dpad{width:132px;height:132px}body.touch .btns{grid-template-columns:repeat(2,64px)}}
+@media (max-width:380px){body.touch .dpad{width:132px;height:132px}body.touch .btns{grid-template-columns:repeat(2,70px)}body.touch .btns button{font-size:7px}}
 </style>
 </head>
 <body>
@@ -257,7 +257,7 @@ const hemiciclo=(()=>{const [c,g]=mk();
 const plato=(()=>{const [c,g]=mk();
  let gr=g.createLinearGradient(0,0,0,H);gr.addColorStop(0,'#081126');gr.addColorStop(.6,'#13285a');gr.addColorStop(1,'#060a16');g.fillStyle=gr;g.fillRect(0,0,W,H);
  g.fillStyle='#0b1733';for(let x=0;x<W;x+=24)g.fillRect(x,0,2,170);
- for(const [x0] of [[44],[184],[324]]){g.fillStyle='#02040a';g.fillRect(x0-4,30,120,78);g.fillStyle='#24324f';g.fillRect(x0-2,32,116,74);}
+ for(const [x0] of [[44],[184],[324]]){g.fillStyle='#02040a';g.fillRect(x0-4,40,120,70);g.fillStyle='#24324f';g.fillRect(x0-2,42,116,66);}
  // mesa de tertulia
  g.fillStyle='#1d2b4d';g.beginPath();g.moveTo(90,176);g.quadraticCurveTo(240,150,390,176);g.lineTo(390,196);g.quadraticCurveTo(240,170,90,196);g.fill();
  g.fillStyle='#4fd6ff';g.beginPath();g.moveTo(90,176);g.quadraticCurveTo(240,150,390,176);g.lineTo(390,178);g.quadraticCurveTo(240,152,90,178);g.fill();
@@ -279,17 +279,17 @@ function drawStage(name,t,hype){
  } else {
   ctx.drawImage(plato,0,0);
   [44,184,324].forEach((x0,i)=>{
-   const g=ctx;R(x0-2,32,116,74,['#1b3c6e','#3a1b4f','#1b5a5a'][i]);
-   for(let y=32;y<106;y+=3)R(x0-2,y,116,1,'rgba(255,255,255,0.05)');
-   const sy=32+((t*0.7+i*20)%74);R(x0-2,sy,116,2,'rgba(255,255,255,0.12)');
-   if(i===1){txt('DEBATE',x0+56,58,16,'#ffcf3a','center',1);txt('EN DIRECTO',x0+56,80,8,'#fff','center',1);}
+   const g=ctx;R(x0-2,42,116,66,['#1b3c6e','#3a1b4f','#1b5a5a'][i]);
+   for(let y=42;y<108;y+=3)R(x0-2,y,116,1,'rgba(255,255,255,0.05)');
+   const sy=42+((t*0.7+i*20)%66);R(x0-2,sy,116,2,'rgba(255,255,255,0.12)');
+   if(i===1){txt('DEBATE',x0+56,62,16,'#ffcf3a','center',1);txt('EN DIRECTO',x0+56,84,8,'#fff','center',1);}
    else{ // gráfico de tarta animado
-    const cx=x0+56,cy=69,a=(t*0.02+i)%(Math.PI*2);g.fillStyle='#ff4f6d';g.beginPath();g.moveTo(cx,cy);g.arc(cx,cy,22,0,a);g.fill();g.fillStyle='#ffcf3a';g.beginPath();g.moveTo(cx,cy);g.arc(cx,cy,22,a,Math.PI*2);g.fill();}
-   R(x0+2,36,26,8,'#e8233f');txt('LIVE',x0+15,36,8,'#fff','center',0);
+    const cx=x0+56,cy=76,a=(t*0.02+i)%(Math.PI*2);g.fillStyle='#ff4f6d';g.beginPath();g.moveTo(cx,cy);g.arc(cx,cy,22,0,a);g.fill();g.fillStyle='#ffcf3a';g.beginPath();g.moveTo(cx,cy);g.arc(cx,cy,22,a,Math.PI*2);g.fill();}
+   R(x0+2,46,26,8,'#e8233f');txt('LIVE',x0+15,46,8,'#fff','center',0);
   });
   R(0,116,W,12,'#e8233f');R(0,116,70,12,'#ffcf3a');txt('DIRECTO',35,118,8,'#000','center',0);
   ctx.save();ctx.beginPath();ctx.rect(70,116,W-70,12);ctx.clip();
-  const tw=TICKER.length*8,off=(t*1.2)%tw;txt(TICKER+TICKER,70+W-off-tw+tw,118,8,'#fff','left',0);txt(TICKER,70-off,118,8,'#fff','left',0);
+  const tw=TICKER.length*8,off=(t*1.2)%tw;txt(TICKER+TICKER,70-off,118,8,'#fff','left',0);
   ctx.restore();
   // focos
   ctx.save();ctx.globalAlpha=0.08+(hype>0?0.06:0);ctx.fillStyle='#bfe8ff';
@@ -343,8 +343,8 @@ function drawFighter(f){
    case 'low':R(ox+1,-46+oy,5,8,C);R(ox+3,-41+oy,11,5,C);R(ox+14,-42+oy,5,6,K);break;
    case 'punch':R(ox+1,-47+oy,26,5,C);R(ox+27,-48+oy,6,7,K);break;
    case 'cross':R(ox+6,-58+oy,5,18,C);R(ox+5,-63+oy,7,5,K);break;
-   case 'up':R(ox,-68+oy,5,22,C);R(ox-1,-73+oy,7,6,K);break;
-   case 'wave':R(ox+2,-62+oy,5,16,C);R(ox+3,-68+oy,7,6,K);break;
+   case 'up':{const ux=back?ox-9:ox+8;R(ux,-68+oy,5,22,C);R(ux-1,-73+oy,7,6,K);}break;
+   case 'wave':R(ox+9,-62+oy,5,16,C);R(ox+8,-68+oy,7,6,K);break;
    case 'point':R(ox+1,-50+oy,20,5,C);R(ox+21,-51+oy,4,6,K);R(ox+25,-50+oy,3,2,K);break;
    case 'wind':R(ox-10,-56+oy,12,5,C);R(ox-15,-58+oy,6,6,K);break;
    case 'throw':R(ox+1,-48+oy,22,5,C);R(ox+23,-49+oy,5,7,K);break;
