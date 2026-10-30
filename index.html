@@ -1251,7 +1251,7 @@ function selectTap(p){const C=cards();
 function vsChars(){if(AR)return[AR.ch,AR.ladder[AR.idx]];const r=roster();return[r[lastPick[0]],r[lastPick[1]]];}
 function vsUpdate(){vsT++;if(vsT===1){sfx.go();const b=vsChars()[1];if(CHARS[b].boss){playMusic('boss');say('Aparece El Lobby');}}
  if(vsT>220||(vsT>30&&(MENU.p('ok')||MENU2.p('ok'))))vsGo();}
-function vsGo(){if(AR){arcadeFight();return;}const [a,b]=vsChars();newMatch(a,b);scene='fight';}
+function vsGo(){try{globalThis.goatcounter?.count?.({path:'partida/hemiciclo-fighters',title:'Partida empezada',event:true});}catch{}if(AR){arcadeFight();return;}const [a,b]=vsChars();newMatch(a,b);scene='fight';}
 function vsDraw(){
  const [ia,ib]=vsChars(),a=CHARS[ia],b=CHARS[ib];
  R(0,0,W,H,'#08060f');
@@ -1398,5 +1398,8 @@ if(document.fonts&&document.fonts.load){Promise.race([document.fonts.load('8px "
 </script>
 
 <script>if('serviceWorker' in navigator&&location.protocol==='https:'){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}</script>
+<!-- Visitas y partidas, contadas por GoatCounter sin cookies (las ve serbenda.github.io/serbenda) -->
+<script>window.goatcounter = { path: '/hemiciclo-fighters/' };</script>
+<script data-goatcounter="https://serbenda.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
 </body>
 </html>
